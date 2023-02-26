@@ -1,7 +1,8 @@
 from os.path import abspath, exists, split as filesplit, join
+from time import time, ctime
 
 ABSOLUTEPATH: str = abspath(__file__)
-PATH_DB: str = r'c:\Users\fmile\Desktop\BOT(Fedor)\DATABASE.txt'
+PATH_DB: str = r'c:\Users\fmile\Desktop\BOT(Fedor)\database\python scripts\DATABASE.txt'
 DERFILE, NAMEFILE = filesplit(ABSOLUTEPATH)
 NAMEDB: str = 'DATABASE.txt'
 POSITIVE: int = 1
@@ -9,11 +10,21 @@ NEGATIVE: int = 0
 POSITIVE_LIST: tuple = ('да', 'ага', '+', 'yes', 'yep', 'ya', 'ofcourse', )
 NEGATIVE_LIST: tuple = ('нет', 'не', '-', 'no', 'nope', 'nah', 'иди нафиг', )
 EXIT: int = NEGATIVE
-FEILDS: tuple = ('ID', 'DATATIME', 'DESCRIPTION', 'DURATION', 'AUTOR', 'NOTIFICATION', 'TEXT_NOTIFICATION')
+FEILDS_DESCRIPTION: dict = {
+    'ID': 'unice auntithicator', 
+    'LOGIN': 'uniqe name', 
+    'TIME_CREATIVE': 'time of crating reminder', 
+    'DATATIME': 'reminding time', 
+    'DESCRIPTION': 'description', 
+    'DURATION': 'duration', 
+    'CLIENT': 'name of client', 
+    'NOTIFICATION': 'how important it is', 
+    'TEXT_NOTIFICATION': 'text of notification'
+}
 SEPARATION: str = '\t' * 3
 
 
-def input_int(request: int, min = '', max = '') -> int:
+def input_int(request: str, min = '', max = '') -> int:
     data: str = ''
     if min and max:
         request += f'(Number should be in the rande from {min} and {max})'
@@ -26,12 +37,14 @@ def input_int(request: int, min = '', max = '') -> int:
             request += f'(Number should be negative):'
         elif max:
             request += f'(Number should be smaler {max}):'
-    while not all((
-        data.isdigit(),
-        (not min or int(data) > int(min)),
-        (not max or int(data ) < int(max))
+    while not ((
+        data.isdigit() or
+        (not min or int(data) > int(min)) or
+        (not max or int(data) < int(max))
     )):
+        print(request)
         data = input()
+    return int(data)
 
 
 def answer(
@@ -97,18 +110,20 @@ def row_read(data: str) -> tuple:
 
 def feel_db() -> int:
     '''Koroche prosto na izi tipo zapolnayet bazu (eto baza!).'''
-    login = input('введите свой <LOGIN>: ')
+    login = input(f"{FEILDS_DESCRIPTION['LOGIN']}: ")
     password = input('введите свой <PASSWORD>: ')
     all_records: list = []
-    amount: int = int(input())#input_int('Сколько записей вы желаете сейчас создать?', min = -1)
+    amount: int = int(input('Ammount of records:'))#input_int('Сколько записей вы желаете сейчас создать?', min = -1)
+    index_first_field_man: int = tuple(FEILDS_DESCRIPTION.keys()).index('DATATIME')
     for i in range(amount):
-        record: tuple = [i, login]
+        time_now = ctime(time())
+        record: tuple = [i, login, time_now]
         print(f'Создаём запись №{i + 1}:')
-        for field in FEILDS[2:]:
-            record.append(input(f'Введите <{field}>: '))
-        all_records.append(row_write(tuple(record)))
+        for field in tuple(FEILDS_DESCRIPTION.keys()) [index_first_field_man:]:
+            record.append(input(f'Введите <{FEILDS_DESCRIPTION[field]}>: '))
+        all_records.append(row_feel(tuple(record)))
     with open(PATH_DB, 'wt', encoding='utf-8') as DATABASE:
-        print(row_write(FEILDS), file = DATABASE)
+        print(row_feel(tuple(FEILDS_DESCRIPTION.keys())), file = DATABASE)
         print(*all_records, sep ='\n', end = '', file = DATABASE)
     print('Создание базы записей прошло успешно')
 
