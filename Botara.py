@@ -2,11 +2,11 @@ from os.path import abspath, exists, split as filesplit, join
 from time import time, ctime
 
 ABSOLUTEPATH: str = abspath(__file__)
-PATH_DB: str = r''
-PATH_LOGS: str = r''
+PATH_DB: str = r'c:\proect_set\database\python_scripts\DATABASE.txt'
+PATH_LOGS: str = r'c:\proect_set\database\python_scripts\LOGS.txt'
 DERFILE, NAMEFILE = filesplit(ABSOLUTEPATH)
 NAMEDB: str = 'DATABASE.txt'
-NAMELOGS: str
+NAMELOGS: str = 'LOGS.txt'
 POSITIVE: int = 1
 NEGATIVE: int = 0
 POSITIVE_LIST: tuple = ('да', 'ага', '+', 'yes', 'yep', 'ya', 'ofcourse', )
@@ -14,12 +14,18 @@ NEGATIVE_LIST: tuple = ('нет', 'не', '-', 'no', 'nope', 'nah', 'иди на
 EXIT: int = NEGATIVE
 DATA_BASE: dict = {
     'path': PATH_DB,
-    'name': 'Database'
+    'name': 'Database',
+    'global_name': NAMEDB,
+    'global_var_path': 'PATH_DB',
 }
+
 LOGS_FILE: dict = {
     'path': PATH_LOGS,
-    'name': 'Logs fille'
+    'name': 'Logs file',
+    'global_name': NAMELOGS,
+    'global_var_path': 'PATH_LOGS',
 }
+
 FEILDS_DESCRIPTION: dict = {
     'ID': 'unice auntithicator', 
     'LOGIN': 'uniqe name', 
@@ -31,11 +37,11 @@ FEILDS_DESCRIPTION: dict = {
     'NOTIFICATION': 'how important it is', 
     'TEXT_NOTIFICATION': 'text of notification'
 }
-FIELDS_LOGS: tuple = {
+FIELDS_LOGS: tuple = (
     'ID',
     'LOGIN',
     'PASSWORD',
-}
+)
 SEPARATION: str = '\t' * 3
 
 
@@ -83,34 +89,35 @@ def answer(
             print("I don't understand you :(")
             print('I only understand thees answers:')
             print(*(positive_list+negative_list), sep='\n')
-        
 
-def registor_path() -> int:
-    '''Registrade a path do the database file.'''
+
+def reg_path(element: dict) -> bool:
+    '''Registrade a path do the element file.'''
     data: list = []
-    global PATH_DB
-    if not exists(PATH_DB):
+    if not exists(element['path']):
         if answer(
-            "Do you want to create a database file in the same plase with program?", 
+            f"Do you want to create a {element['name']} file in the same plase with program?", 
             natification=f'If you say yes file will be loade in this directory:\n{DERFILE}'
             ):
-            PATH_DB = join(DERFILE, NAMEDB)
+            globals()[element['global_var_path']] = join(DERFILE, element['global_name'])
         else:
-            PATH_DB = join(input("Enter derictory's full path"), NAMEDB)
-        try:
-            with open(PATH_DB, 'wt', encoding='utf') as create_file:
-                print('', end='', file=create_file)
-        except:
-            return NEGATIVE
+            user_direcory: str = input("Enter derictory's full path")
+            globals()[element['global_var_path']] = join(user_direcory, element['global_name'])
+            try:
+                open(join(user_direcory, element['global_name']), 'wt', encoding='utf').close()
+            except:
+                print("Coudn't create a fille in this directory")
+                return NEGATIVE
+        path: str = globals()[element['global_var_path']]
         with open(ABSOLUTEPATH, 'rt', encoding='utf') as main_file:
             data = main_file.readlines()
-        for index,row in enumerate(data):
-            if 'PATH_DB: str = r' in row:
-                data[index] = f"PATH_DB: str = r'{PATH_DB}'\n"
+        for index, row in enumerate(data):
+            if f'{element["global_var_path"]}: str = r' in row:
+                data[index] = f"{element['global_var_path']}: str = r'{path}'\n"
                 break
         with open(ABSOLUTEPATH, 'wt', encoding='utf') as main_file:
             print(*data, sep='', end='', file=main_file)
-        return POSITIVE
+    return POSITIVE
 
 
 def row_feel(data: tuple) -> str:
@@ -144,38 +151,36 @@ def feel_db() -> int:
 
 
 
-def create(element: dict) -> int:
+def create(element: dict) -> bool:
     '''Creates a data base if it is not found.'''
     if answer(
         f'Do you wanna create {element["name"]}?',
-        natification=f"App won't work with out database{[]}"
+        natification=f"App won't work with out {element['name']}"
     ):
-        registor_path()
+        reg_path(element)
         feel_db()
+        print(f'{element["name"]} is created sucssesfuly')
         return POSITIVE
-    return NEGATIVE      
+    return NEGATIVE
 
-def check(element: dict) -> int:
-    '''Checks database.'''
-    result = not exists(PATH_DB):
-    print(f"{element['name']}Database is {('not ', '')[result]}found")
-    return not result
 
-def create_logs() -> int: ...
+def check(element: dict) -> bool:
+    '''Checks elements.'''
+    result_find =  exists(element['path'])
+    print(f"{element['name']} is {('not ', '')[result_find]}found")
+    if not result_find:
+        result_create: bool = create(element)
+        return result_create
+    return result_find
+
 
 def main() -> None:
     '''Main function'''
-    if check(DATA_BASE):
-        if check(LOGS_FILE):
-            ...
-        else:
-            create_logs()
+    if all((check(DATA_BASE), check(LOGS_FILE))):
+        print('All fiells is loaded sucsessful')
+        ...
     else:
-        if create_db():
-            print('Database is created sucssesfuly')
-        else:
-            print('Program have succsesfuly ended')
-            return EXIT
+        print('Program have succsesfuly ended')
 
 
 if __name__ == '__main__':
