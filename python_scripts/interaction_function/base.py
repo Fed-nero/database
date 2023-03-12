@@ -27,8 +27,6 @@ def create_records(id: int) -> str:
     index_first_field_man: int = tuple(FEILDS_DESCRIPTION.keys()).index('DATATIME')
     time_now = ctime(time())
     record_id: int = id
-    if CREATOR_ID:
-        user_id = 0
     record: list = [user_id, record_id, time_now, ]
     for field in tuple(FEILDS_DESCRIPTION.keys()) [index_first_field_man:]:
         record.append(input(f'Введите <{FEILDS_DESCRIPTION[field]}>: '))

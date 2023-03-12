@@ -9,13 +9,16 @@ user_id: int = 0
 
 def main() -> None:
     '''Main function'''
-    from Baza_constanti import UNKNOW, DATA_BASE, LOGS_FILE
+    from Baza_constanti import DATA_BASE, LOGS_FILE, CODE_CREATE_CREATOR
     from file_func.file_base import check
     from identification.main_menu import identification_menue
-    if all((check(LOGS_FILE), check(DATA_BASE))):
+    from typing import Union
+
+    global user_id
+    code_existance_creator: Union[bool, int]
+    if all((code_existance_creator:= check(LOGS_FILE), check(DATA_BASE))):
         print('All fiells is loaded sucsessful')
-        
-        if not CREATOR_ID:
+        if not code_existance_creator == CODE_CREATE_CREATOR:
             user_id = identification_menue()
         print(f"User id-{user_id}")
     else:

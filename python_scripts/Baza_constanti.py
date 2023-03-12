@@ -11,10 +11,11 @@ NAMEDB: str = 'DATABASE.txt'
 NAMELOGS: str = 'LOGS.txt'
 POSITIVE: bool = True
 NEGATIVE: bool = False
-POSITIVE_LIST: tuple = ('да', 'ага', '+', 'yes', 'yep', 'ya', 'ofcourse', )
-NEGATIVE_LIST: tuple = ('нет', 'не', '-', 'no', 'nope', 'nah', 'иди нафиг', )
+POSITIVE_LIST: tuple = ('да', 'ага', '+', 'yes', 'yep', 'ya', 'ofcourse', 'y', 'д' )
+NEGATIVE_LIST: tuple = ('нет', 'не', '-', 'no', 'nope', 'nah', 'n', 'н' )
 EXIT: int = NEGATIVE
 UNKNOW: int = -1
+CODE_CREATE_CREATOR: int = 69
 DATA_BASE: dict = {
     'path': PATH_DB,
     'name': 'Database',

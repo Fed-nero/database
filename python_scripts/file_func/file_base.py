@@ -1,3 +1,5 @@
+from typing import Union
+
 def reg_path(element: dict) -> tuple[bool, str]:
     '''Registrade a path do the element file.'''
     from interaction_function.user import answer
@@ -35,10 +37,10 @@ def reg_path(element: dict) -> tuple[bool, str]:
     return tuple(result)
 
 
-def feel(element: dict) -> None: #Сделать возможным принудительную регистрацию пользователя
+def feel(element: dict) -> Union[bool, int]: #Сделать возможным принудительную регистрацию пользователя
     '''Felling select element.'''
+    from Baza_constanti import POSITIVE, CODE_CREATE_CREATOR
     from interaction_function.user import answer
-    import Main
     from interaction_function.base import (
         row_write,
         create_user,
@@ -46,28 +48,29 @@ def feel(element: dict) -> None: #Сделать возможным принуд
     )
     from Baza_constanti import (
         LOGS_FILE,
-        UNKNOW,
-        PATH_DB,
-        PATH_LOGS,
         DATA_BASE,
         FIELDS_LOGS,
         FEILDS_DESCRIPTION
     )
     data: list
+    global creater_create
     if element == LOGS_FILE:
-        global user_id
+        creater_create = False
         data = [row_write(FIELDS_LOGS), ]
         if answer(
             'Логс файлы успешно созданы, желаете ли вы создать первого пользователя?'
         ):
-            new_user: tuple = create_user(user_id:=0)
+            new_user: tuple = create_user(0)
+            creater_create = True
             data.append(row_write(new_user))
         with open(element['path'], 'wt', encoding='utf-8') as logs_file:
-            print(*data, sep='\n', end='', file=logs_file)  
-        Main.CREATOR_ID = True 
+            print(*data, sep='\n', end='', file=logs_file)
+        if creater_create:
+            return CODE_CREATE_CREATOR
+        return POSITIVE
     elif element == DATA_BASE:
         data = [row_write(tuple(FEILDS_DESCRIPTION.keys())), ]
-        if Main.CREATOR_ID and answer(
+        if creater_create and answer(
                 'База данных успешно создана, хотите ли вы заполнить её записями?'
             ):
             records_amount: int = int(input('Введите колличество новых записей:'))#
@@ -76,12 +79,13 @@ def feel(element: dict) -> None: #Сделать возможным принуд
                 data.append(create_records(i))
         with open(element['path'], 'wt', encoding='utf-8') as data_base_file:
             print(*data, sep='\n', end='', file=data_base_file)
+    return POSITIVE
 
 
-def create(element: dict) -> bool:
+def create(element: dict) -> Union[bool, int]:
     '''Creates a data base if it is not found.'''
     from interaction_function.user import answer
-    from Baza_constanti import NEGATIVE, POSITIVE
+    from Baza_constanti import NEGATIVE
     result_registration: tuple[bool, str]
     KEY_RESULT_REG: int = 0
     KEY_PATH: int = 1
@@ -90,18 +94,18 @@ def create(element: dict) -> bool:
         natification=f"App won't work with out {element['name']}"
     ) and (result_registration:= reg_path(element))[KEY_RESULT_REG]:
         element['path'] = result_registration[KEY_PATH]
-        feel(element)
+        flag: Union[bool, int] = feel(element)
         print(f'{element["name"]} is created sucssesfuly')
-        return POSITIVE
+        return flag
     return NEGATIVE
 
 
-def check(element: dict) -> bool:
+def check(element: dict) -> Union[bool, int]:
     '''Checks elements.'''
     from os.path import exists
     result_find =  exists(element['path'])
     print(f"{element['name']} is {('not ', '')[result_find]}found")
     if not result_find:
-        result_create: bool = create(element)
+        result_create: Union[bool, int] = create(element)
         return result_create
     return result_find
