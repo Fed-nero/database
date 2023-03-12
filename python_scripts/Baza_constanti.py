@@ -5,7 +5,7 @@ from Main import ABSOLUTEPATH
 
 PATH_DB: str = r''
 PATH_LOGS: str = r''
-CONST_FILE_NAME: str = 'Bza_constanti.py'
+CONST_FILE_NAME: str = 'Baza_constanti.py'
 DERFILE, NAMEFILE = filesplit(ABSOLUTEPATH)
 NAMEDB: str = 'DATABASE.txt'
 NAMELOGS: str = 'LOGS.txt'

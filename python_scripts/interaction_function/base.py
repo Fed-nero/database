@@ -1,4 +1,4 @@
-
+'''This file is for functions for base.'''
 
 def row_write(data: tuple) -> str:
     '''Converts tuples in to text for database'''
@@ -21,12 +21,14 @@ def create_user(id: int) -> tuple:
 
 
 def create_records(id: int) -> str:
+    from Main import CREATOR_ID, user_id
     from time import ctime, time
     from Baza_constanti import FEILDS_DESCRIPTION
-    from Main import user_id
     index_first_field_man: int = tuple(FEILDS_DESCRIPTION.keys()).index('DATATIME')
     time_now = ctime(time())
     record_id: int = id
+    if CREATOR_ID:
+        user_id = 0
     record: list = [user_id, record_id, time_now, ]
     for field in tuple(FEILDS_DESCRIPTION.keys()) [index_first_field_man:]:
         record.append(input(f'Введите <{FEILDS_DESCRIPTION[field]}>: '))
