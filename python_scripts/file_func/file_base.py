@@ -154,13 +154,13 @@ def load_file(
                 ) in data_file:
                     if not id_user in data:
                         data[id_user] = {}
-                    data[id_user][id_record_data] = dict(zip(FEILDS_RECORDS, another))
+                    data[int(id_user)][int(id_record_data)] = dict(zip(FEILDS_RECORDS, another))
             case 5:
                 from Baza_constanti import FEILDS_LOGS
                 KEY_TITLE_LOGIN: int = 1
                 KEY_TITLE_PAS: int = 2
                 for id_data, log_data, pass_data in data_file:
-                    data[id_data] = {
+                    data[int(id_data)] = {
                         FEILDS_LOGS[KEY_TITLE_LOGIN]: log_data, 
                         FEILDS_LOGS[KEY_TITLE_PAS]: pass_data,
                         }

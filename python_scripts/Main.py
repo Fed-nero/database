@@ -22,7 +22,7 @@ def main() -> None:
         print(logs)
         if not code_existance_creator == CODE_CREATE_CREATOR:
             user_id, logs = identification_menue(logs)
-        print(f'Wellcome {logs[str(user_id)]["LOGIN"]}!')
+        print(f'Wellcome {logs[user_id]["LOGIN"]}!')
 
         save_all(db, logs, DATA_BASE['path'], LOGS_FILE['path'])
 
