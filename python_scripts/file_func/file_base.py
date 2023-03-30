@@ -1,5 +1,6 @@
 from typing import Union
 
+
 def reg_path(element: dict) -> tuple[bool, str]:
     '''Registrade a path do the element file.'''
     from interaction_function.user import answer
@@ -49,14 +50,14 @@ def feel(element: dict) -> Union[bool, int]: #Сделать возможным 
     from Baza_constanti import (
         LOGS_FILE,
         DATA_BASE,
-        FIELDS_LOGS,
+        FEILDS_LOGS,
         FEILDS_DESCRIPTION
     )
     data: list
     global creater_create
     if element == LOGS_FILE:
         creater_create = False
-        data = [row_write(FIELDS_LOGS), ]
+        data = [row_write(FEILDS_LOGS), ]
         if answer(
             'Логс файлы успешно созданы, желаете ли вы создать первого пользователя?'
         ):
@@ -109,3 +110,83 @@ def check(element: dict) -> Union[bool, int]:
         result_create: Union[bool, int] = create(element)
         return result_create
     return result_find
+
+
+def load_file(
+        config_code: int,
+        config_path: str
+) -> Union[
+    dict[
+        int,
+        dict[str, str]
+    ],
+    dict[
+        int, dict[
+            int, dict[
+                str, Union[
+                    str, 
+                    int, 
+                    __import__('datetime').datetime
+                ]
+            ]
+        ]
+    ]
+]:
+    '''This gets a code of config.'''
+    from Baza_constanti import SEPARATION
+    data: dict = {}
+    ERROR: bool = False
+    try:
+        with open(config_path, 'rt', encoding='utf-8') as file_r:
+            TITLE_ROW: int = 1
+            data_file = map(lambda s: s.split(SEPARATION), file_r.readlines()[TITLE_ROW:])
+    except:
+        print(f'Error {config_path}')  
+        ERROR = False 
+    if not ERROR:
+        match config_code:
+            case 6:
+                from Baza_constanti import FEILDS_RECORDS
+                for (
+                    id_user,
+                    id_record_data,
+                    *another
+                ) in data_file:
+                    if not id_user in data:
+                        data[id_user] = {}
+                    data[id_user][id_record_data] = dict(zip(FEILDS_RECORDS, another))
+            case 5:
+                from Baza_constanti import FEILDS_LOGS
+                KEY_TITLE_LOGIN: int = 1
+                KEY_TITLE_PAS: int = 2
+                for id_data, log_data, pass_data in data_file:
+                    data[id_data] = {
+                        FEILDS_LOGS[KEY_TITLE_LOGIN]: log_data, 
+                        FEILDS_LOGS[KEY_TITLE_PAS]: pass_data,
+                        }
+            case _:
+                print('Неизвестный код конфига')
+    return data
+
+def load_all(db_config, logs_config):
+    from Baza_constanti import CODE_CONFIG_DB, CODE_CONFIG_LOGS
+    db = load_file(CODE_CONFIG_DB,db_config['path'])
+    logs = load_file(CODE_CONFIG_LOGS,logs_config['path'])
+    return db, logs
+
+def save_all(db, logs, db_path, logs_path):
+    from Baza_constanti import FEILDS_LOGS, FEILDS_DESCRIPTION
+    from interaction_function.base import row_write
+
+
+    with (open(db_path, 'wt', encoding='utf-8') as db_file,
+    open(logs_path, 'wt', encoding='utf-8') as logs_file): 
+        print(row_write(FEILDS_LOGS), file=logs_file, end='')
+        for user_id, user_congif in logs.items():
+            print('', file=logs_file)
+            print(row_write((user_id, *user_congif.values())),  file=logs_file, end='')
+        print(row_write(FEILDS_DESCRIPTION.keys()), file=db_file, end='')
+        for user_id in db:
+            for records_id, records_congif in db[user_id].items():
+                print('', file=logs_file)
+                print(row_write((user_id, records_id, *records_congif.values())),  file=db_file, end='')

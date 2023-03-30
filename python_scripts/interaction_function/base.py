@@ -31,3 +31,15 @@ def create_records(id: int) -> str:
     for field in tuple(FEILDS_DESCRIPTION.keys()) [index_first_field_man:]:
         record.append(input(f'Введите <{FEILDS_DESCRIPTION[field]}>: '))
     return row_write(record)
+
+def logs_update(logs, *users:tuple):
+    from Baza_constanti import FEILDS_LOGS
+    KEY_TITLE_LOG: int = 1
+    KEY_TITLE_PAS: int = 2
+    for user in users:
+        id,log,pas = user
+        logs[id] = {
+            FEILDS_LOGS[KEY_TITLE_LOG]: log,
+            FEILDS_LOGS[KEY_TITLE_PAS]: pas,
+        }
+    return logs

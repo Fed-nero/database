@@ -3,8 +3,12 @@
 from os.path import split as filesplit
 from Main import ABSOLUTEPATH
 
-PATH_DB: str = r''
-PATH_LOGS: str = r''
+CODE_CONFIG_LOGS: int = 5
+CODE_CONFIG_DB: int = 6
+CODE_CREATE_CREATOR: int = 7
+
+PATH_DB: str = r'c:\Users\fmile\Desktop\BOT(Fedor)\database\python_scripts\DATABASE.txt'
+PATH_LOGS: str = r'c:\Users\fmile\Desktop\BOT(Fedor)\database\python_scripts\LOGS.txt'
 CONST_FILE_NAME: str = 'Baza_constanti.py'
 DERFILE, NAMEFILE = filesplit(ABSOLUTEPATH)
 NAMEDB: str = 'DATABASE.txt'
@@ -15,7 +19,6 @@ POSITIVE_LIST: tuple = ('да', 'ага', '+', 'yes', 'yep', 'ya', 'ofcourse', '
 NEGATIVE_LIST: tuple = ('нет', 'не', '-', 'no', 'nope', 'nah', 'n', 'н' )
 EXIT: int = NEGATIVE
 UNKNOW: int = -1
-CODE_CREATE_CREATOR: int = 69
 DATA_BASE: dict = {
     'path': PATH_DB,
     'name': 'Database',
@@ -41,9 +44,18 @@ FEILDS_DESCRIPTION: dict = {
     'NOTIFICATION': 'how important it is', 
     'TEXT_NOTIFICATION': 'text of notification'
 }
-FIELDS_LOGS: tuple = (
+FEILDS_LOGS: tuple = (
     'ID',
     'LOGIN',
     'PASSWORD',
+)
+FEILDS_RECORDS: tuple = (
+    'TIME_CREATIVE',
+    'DATATIME',
+    'DESCRIPTION',
+    'DURATION',
+    'CLIENT',
+    'NOTIFICATION',
+    'TEXT_NOTIFICATION',
 )
 SEPARATION: str = '\t' * 3
