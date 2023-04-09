@@ -14,9 +14,10 @@ def row_read(data: str) -> tuple:
 
 def create_user(id: int) -> tuple:
     '''Create a new user.'''
+    from interaction_function.user import get_login, get_password
     user_id: int = id
-    user_login: str = input("{введите свой <LOGIN>: ")
-    user_password: str = input('введите свой <PASSWORD>: ')
+    user_login: str = get_login("{введите свой <LOGIN>: ")
+    user_password: str = get_password('введите свой <PASSWORD>: ')
     return user_id, user_login, user_password
 
 

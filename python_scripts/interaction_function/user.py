@@ -57,3 +57,53 @@ def input_int(request: str, min: str = '', max: str = '') -> int:
         print(request)
         data = input()
     return int(data)
+
+def content_without_space(title_content: str) -> str:
+    print(f'Enter your {title_content}:')
+    content: str = input('> ')
+    potent_content: str = content.strip()
+    if not content == potent_content:
+        print('Spaces will be deleted')
+        content = potent_content
+        print(f'Your {title_content} will look loke this: {content}')
+    return content
+
+def correct_case(title_content: str, content: str) -> str:
+    var: dict = {
+        '1': content.capitalize(),
+        '2': content.title(),
+        '0': content,
+    }
+    content_perfect: str = ''
+    content_capitalize: str = var['1']
+    if content == content_capitalize:
+        print('Не забывайте о том, что в {title_content} регистр имеет значение!')
+        content_perfect = content
+    else:
+        print(f'У вас нестандартный регистр в поле ввода {title_content}')
+        print('Вы можете изменить его при желании')
+        for key, item in var.items():
+            print(f'{key}) {item}')
+        print('Выберите номер варианта:')
+        key_var: str = input('> ')
+        if key_var in var:
+            content_perfect = var[key_var]
+        else:
+            print('Вы ввели некоректный ключ, вам будет присвоен {title_content}:')
+            content_perfect = var['1']
+            print(content_perfect)
+    return content_perfect
+
+
+def perfect_content(title_content: str):
+    potent_content: str = content_without_space(title_content)
+    return correct_case(title_content, potent_content)
+
+def get_login() -> str:
+    potent_login: str = perfect_content('login')
+    ...
+
+
+def get_password() -> str:
+    potent_password: str = perfect_content('password')
+    ...
