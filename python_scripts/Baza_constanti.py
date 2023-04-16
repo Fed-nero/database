@@ -7,6 +7,10 @@ CODE_CONFIG_LOGS: int = 5
 CODE_CONFIG_DB: int = 6
 CODE_CREATE_CREATOR: int = 7
 
+PASSWORD_LEN_MIN: int = 7
+PASSWORD_LENLMAX: int = 15
+PASSWOED_RPEAT_CHAR_MAX: int = 3
+
 PATH_DB: str = r'c:\Users\fmile\Desktop\BOT(Fedor)\database\python_scripts\DATABASE.txt'
 PATH_LOGS: str = r'c:\Users\fmile\Desktop\BOT(Fedor)\database\python_scripts\LOGS.txt'
 CONST_FILE_NAME: str = 'Baza_constanti.py'

@@ -29,7 +29,7 @@ def identification_menue(logs) -> int:
         responce_user = input('> ').strip().capitalize()
         if responce_user in POINT_ACTION.keys():
             return ACTION_FUNCTION[POINT_ACTION[responce_user]](logs)
-        elif responce_user in ACTION_FUNCTION.keys():
+        elif responce_user in ACTION_FUNCTION.values():
             return ACTION_FUNCTION[responce_user](logs)
         else:
             print('Incorect input')

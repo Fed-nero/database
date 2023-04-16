@@ -68,42 +68,97 @@ def content_without_space(title_content: str) -> str:
         print(f'Your {title_content} will look loke this: {content}')
     return content
 
-def correct_case(title_content: str, content: str) -> str:
-    var: dict = {
-        '1': content.capitalize(),
-        '2': content.title(),
-        '0': content,
-    }
-    content_perfect: str = ''
-    content_capitalize: str = var['1']
-    if content == content_capitalize:
-        print('Не забывайте о том, что в {title_content} регистр имеет значение!')
-        content_perfect = content
-    else:
-        print(f'У вас нестандартный регистр в поле ввода {title_content}')
-        print('Вы можете изменить его при желании')
-        for key, item in var.items():
-            print(f'{key}) {item}')
-        print('Выберите номер варианта:')
-        key_var: str = input('> ')
-        if key_var in var:
-            content_perfect = var[key_var]
-        else:
-            print('Вы ввели некоректный ключ, вам будет присвоен {title_content}:')
-            content_perfect = var['1']
-            print(content_perfect)
-    return content_perfect
-
-
-def perfect_content(title_content: str):
-    potent_content: str = content_without_space(title_content)
-    return correct_case(title_content, potent_content)
 
 def get_login() -> str:
-    potent_login: str = perfect_content('login')
+    potent_login: str = content_without_space('login')
     ...
 
 
 def get_password() -> str:
-    potent_password: str = perfect_content('password')
-    ...
+    from Baza_constanti import PASSWORD_LEN_MIN, PASSWORD_LENLMAX
+    def check_len(user_password: str) -> bool:
+        return PASSWORD_LEN_MIN <= len(user_password) <= PASSWORD_LENLMAX
+    
+    def check_chars_exist(user_password: str) -> bool:
+        number_flag: bool = False
+        spec_flag: bool = False
+        letter_flag: bool = False
+        for char in user_password:
+            if char in '0123456789':
+                number_flag = True
+            elif char in '!@#$%^&*()_+-="№;:?\'\\|/<>,.~`':
+                spec_flag = True
+            else:
+                letter_flag = True
+            if all((number_flag, spec_flag, letter_flag)):
+                return True
+        return False
+    
+    def check_content_uniqe(user_password: str) -> bool:
+        forbid_words:tuple[str] = (
+            'qwe'
+            'qwerty'
+            'zxc'
+            'abs'
+            'asd'
+            '123'
+            '987'
+            'pas'
+            '12345678'
+        )
+        return not any((forbid_words in user_password for forbid_word in forbid_words))
+    
+    def check_case(user_password: str) -> bool:
+        lower_case: bool = False
+        upper_case: bool = False
+        for char in user_password:
+            if 'a' <= char <= 'z' or 'а' <= char <= 'я':
+                lower_case = True 
+            elif 'A' <= char <= 'Z' or 'А' <= char <= 'Я':
+                upper_case = True 
+            if all((lower_case, upper_case)): 
+                return True
+        return False
+        
+    def check_repeat_char(user_password: str) -> bool:
+        from Baza_constanti import PASSWOED_RPEAT_CHAR_MAX
+        char_before: str = user_password[0]
+        counter_repeat_now: int = 1
+        counter_repeat_global: int = 0
+        for char in user_password[1:]:
+            if char == char_before:
+                counter_repeat_now += 1
+            else:
+                counter_repeat_global = max(counter_repeat_global, counter_repeat_now)
+                counter_repeat_now = 1
+            char_before = char
+        counter_repeat_global = max(counter_repeat_global, counter_repeat_now)
+        return counter_repeat_global <= PASSWOED_RPEAT_CHAR_MAX
+    potent_password: str = ''
+    while not (potent_password and all(result_check)):
+        if potent_password:
+            for index, value in enumerate(result_check):
+                if not value:
+                    match index:
+                        case 0:
+                            print(f'Длина пароля должна быть в дапазоне от {PASSWORD_LEN_MIN} до {PASSWORD_LENLMAX} символов.')
+                        case 1:
+                            print('Пароль должен содержать буквы, цифры и спец. символы.')
+                        case 2:
+                            print('Пароль не должен содержать частоиспользуемые сочетания символов.')
+                        case 3:
+                            print('Пароль должен содержать буквы разных регистров.')
+                        case 4:
+                            print('Too much of symbol repeating')
+                        case _:
+                            print('Unknown error')
+        potent_password: str = content_without_space('password')
+        result_check: tuple[bool] = (
+            check_len(potent_password),
+            check_chars_exist(potent_password),
+            check_content_uniqe(potent_password),
+            check_case(potent_password),
+            check_repeat_char(potent_password)
+        )
+    print('the pasword is perfect!')
+    return potent_password

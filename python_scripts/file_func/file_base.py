@@ -71,6 +71,7 @@ def feel(element: dict) -> Union[bool, int]: #Сделать возможным 
         return POSITIVE
     elif element == DATA_BASE:
         data = [row_write(tuple(FEILDS_DESCRIPTION.keys())), ]
+        creater_create = False
         if creater_create and answer(
                 'База данных успешно создана, хотите ли вы заполнить её записями?'
             ):
