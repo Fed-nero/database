@@ -76,8 +76,17 @@ def get_login() -> str:
 
 def get_password() -> str:
     from Baza_constanti import PASSWORD_LEN_MIN, PASSWORD_LENLMAX
+    
+    def get_hash(password: str) -> str:
+        from hashlib import md5
+        baite_str: str = password.encode('utf-8')
+        hash_object: str = md5(baite_str)
+        return hash_object.hexdigest()
+
+    
     def check_len(user_password: str) -> bool:
         return PASSWORD_LEN_MIN <= len(user_password) <= PASSWORD_LENLMAX
+    
     
     def check_chars_exist(user_password: str) -> bool:
         number_flag: bool = False
@@ -161,4 +170,4 @@ def get_password() -> str:
             check_repeat_char(potent_password)
         )
     print('the pasword is perfect!')
-    return potent_password
+    return get_hash(potent_password)

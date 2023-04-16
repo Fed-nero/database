@@ -1,3 +1,11 @@
 ID			LOGIN			PASSWORD
-0			fu			fjk
-1			Nagibator3000			MFA2009t!
+0			Nagibator3000			MFA2009t!
+1			NeSerGay			6f4f1952711d34e01c4aa584ab36c103
+2			TochnoNeSerGay			ede4152cf86e3ba870cab860aa4a021e
+3			NyTeperTochnoNeSerGay			1b584e0003ccc1ff2064bcb23d4552672
+4			NuLadnoYaSerGay			277c16460e0ba65fd175b30e50930b502217
+5			AndreySvetlanoVich			6f4f1952711d34e01c4aa584ab36c10322
+6			SvetlanaSerGay_o_Vich			6f4f1952711d34e01c4aa584ab36c103
+7			Fedya=Nerd.Fedyaedition			6f4f1952711d34e01c4aa584ab36c103
+8			Fedya.NoBi#ches			6f4f1952711d34e01c4aa584ab36c103
+9			Fedyaedition.Nolife.Nofriends.Nogirl.Nograss.Noiq			6f4f1952711d34e01c4aa584ab36c103

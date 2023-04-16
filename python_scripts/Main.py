@@ -18,12 +18,9 @@ def main() -> None:
     if all((code_existance_creator:= check(LOGS_FILE), check(DATA_BASE))):
         print('All fiells is loaded sucsessful')
         db, logs = load_all(DATA_BASE, LOGS_FILE)
-        print(db)
-        print(logs)
         if not code_existance_creator == CODE_CREATE_CREATOR:
             user_id, logs = identification_menue(logs)
         print(f'Wellcome {logs[user_id]["LOGIN"]}!')
-
         save_all(db, logs, DATA_BASE['path'], LOGS_FILE['path'])
 
     else:

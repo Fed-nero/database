@@ -163,7 +163,7 @@ def load_file(
                 for id_data, log_data, pass_data in data_file:
                     data[int(id_data)] = {
                         FEILDS_LOGS[KEY_TITLE_LOGIN]: log_data, 
-                        FEILDS_LOGS[KEY_TITLE_PAS]: pass_data,
+                        FEILDS_LOGS[KEY_TITLE_PAS]: pass_data.rstrip('\n'),
                         }
             case _:
                 print('Неизвестный код конфига')
@@ -185,7 +185,7 @@ def save_all(db, logs, db_path, logs_path):
         print(row_write(FEILDS_LOGS), file=logs_file, end='')
         for user_id, user_congif in logs.items():
             print('', file=logs_file)
-            print(row_write((user_id, *user_congif.values())),  file=logs_file, end='')
+            print(row_write((user_id, *user_congif.values())), file=logs_file, end='')
         print(row_write(FEILDS_DESCRIPTION.keys()), file=db_file, end='')
         for user_id in db:
             for records_id, records_congif in db[user_id].items():
