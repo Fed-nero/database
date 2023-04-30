@@ -16,7 +16,7 @@ def create_user(id: int) -> tuple:
     '''Create a new user.'''
     from interaction_function.user import get_login, get_password
     user_id: int = id
-    user_login: str = input("{введите свой <LOGIN>: ")#get_login("{введите свой <LOGIN>: ")
+    user_login: str = get_login()
     user_password: str = get_password()
     return user_id, user_login, user_password
 

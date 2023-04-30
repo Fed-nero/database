@@ -1,5 +1,18 @@
 def identification_menue(logs) -> int:
     '''This menue opens when user launched idenifies him and returns his id.'''
+    
+
+    def identify_user() -> int:
+        from interaction_function.hash import get_hash
+        from interaction_function.functions_to_work_with_logs.checks_logs import check_logins
+        print('Enter your login:')
+        enterd_login: str = input('> ')
+        while not (check_logins(enterd_login)):
+            print('Enter your login:')
+            enterd_login = input('> ')
+        print('Enter your password:')
+        enterd_password_hash: str = get_hash(input('> '))
+    
     from typing import Callable, Union
     from file_func.file_records import reg_new_user
 
@@ -12,7 +25,7 @@ def identification_menue(logs) -> int:
     }
     ACTION_FUNCTION: dict[str, Callable[[], Union[int, None]]]
     ACTION_FUNCTION = {
-        'Login' : 1,
+        'Login' : identify_user,
         'Signup' : reg_new_user,
         'Setings' : 3,
         'Support' : 4,

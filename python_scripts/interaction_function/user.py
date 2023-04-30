@@ -59,8 +59,14 @@ def input_int(request: str, min: str = '', max: str = '') -> int:
     return int(data)
 
 def content_without_space(title_content: str) -> str:
+    content: str
     print(f'Enter your {title_content}:')
-    content: str = input('> ')
+    print('> ', end='')
+    if title_content == 'login':
+        content = input()
+    else:
+        from getpass import getpass
+        content = getpass()
     potent_content: str = content.strip()
     if not content == potent_content:
         print('Spaces will be deleted')
@@ -70,18 +76,22 @@ def content_without_space(title_content: str) -> str:
 
 
 def get_login() -> str:
-    potent_login: str = content_without_space('login')
-    ...
+    from Baza_constanti import MIN_LOGIN_LENGHT, MAX_LOGIN_LENGHT, PRAVELNIE_SLOVA_DLYA_USER
+    from interaction_function.functions_to_work_with_logs.checks_logs import check_logins
+    true_or_false: bool = True
+    potent_login: str
+    while true_or_false:
+        potent_login = content_without_space('login')
+        if not (MIN_LOGIN_LENGHT < len(potent_login) < MAX_LOGIN_LENGHT) and check_logins(potent_login):
+            print(PRAVELNIE_SLOVA_DLYA_USER)
+        else:
+            true_or_false = False
+    return potent_login
 
 
 def get_password() -> str:
     from Baza_constanti import PASSWORD_LEN_MIN, PASSWORD_LENLMAX
-    
-    def get_hash(password: str) -> str:
-        from hashlib import md5
-        baite_str: str = password.encode('utf-8')
-        hash_object: str = md5(baite_str)
-        return hash_object.hexdigest()
+    from interaction_function.hash import get_hash
 
     
     def check_len(user_password: str) -> bool:
