@@ -3,6 +3,8 @@ def identification_menue(logs) -> int:
     
 
     def identify_user() -> int:
+        def parse_id(row: str) -> int:
+            
         from interaction_function.hash import get_hash
         from interaction_function.functions_to_work_with_logs.checks_logs import check_logins
         print('Enter your login:')
