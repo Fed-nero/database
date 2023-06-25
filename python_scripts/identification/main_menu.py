@@ -11,10 +11,13 @@ def identification_menue(logs) -> int:
         def generate_function_parse_id(login: str, entered_password_hash: str) -> Callable[[str], int]:
             from Baza_constanti import SEPARATION
             def parse_id(row: str) -> int:
-                print(row)
-                user_id, user_login, user_pas_hash = row.split(SEPARATION)
-                if login == user_login and entered_password_hash == user_pas_hash:
-                    print(user_id)
+                def compare_str(obj_one: str, obj_two: str) -> bool:
+                    if len(obj_one) - len(obj_two):
+                        return False
+                    buffer = [char1 == char2 for char1, char2 in zip (obj_one, obj_two)]
+                    return all(buffer)
+                user_id, user_login, user_pas_hash, _ = row.split(SEPARATION)
+                if (login == user_login) and compare_str(str(entered_password_hash), str(user_pas_hash).strip()):
                     return int(user_id)
                 return -1
             return parse_id
@@ -28,16 +31,16 @@ def identification_menue(logs) -> int:
                     return candidate_login
             return ''
         
-        def check_db_password(check: Callable[[str], id]) -> bool:
+        def check_db_password(check: Callable[[str], id]) -> int:
             with open(PATH_LOGS, 'rt', encoding='utf-8') as log_file_tovarishi:
                     log_file_tovarishi.seek(0)
                     log_file_tovarishi.readline()
                     for row in log_file_tovarishi:
                         if (result := check(row)) != -1:
                             return result
-                    return False
+                    return -1
             
-        def make_request_user_password(login: str) -> bool:
+        def make_request_user_password(login: str) -> int:
             '''This function returns True if user entered password or False if the user wants to cancel the password and rewrite login.'''
             from interaction_function.hash import get_hash
             candidate_password: str = '-'
@@ -46,14 +49,17 @@ def identification_menue(logs) -> int:
                 candidate_password = input('Enter your password, but if you want to return to entering a password don\'t enter anything\n')#экранизация
                 candidate_password_hash = get_hash(candidate_password)
                 check_functions_compare_password: Callable[[str], id] = generate_function_parse_id(login, candidate_password_hash)
-                if id_user:=check_db_password(check_functions_compare_password):
+                if (id_user:=check_db_password(check_functions_compare_password))+1:
                     return id_user
-            return False
+
+            return -1
         
         from interaction_function.functions_to_work_with_logs.checks_logs import check_logins
         #visualnoye razdeleniye
         while login := make_request_user_login():#Making request to the user to get his login if user stops this operation then we return him to the main menue
-            if iduser := make_request_user_password(login):#If user entered correct log in then we start making request about his password
+            #zona dyavola (ne pisat)
+            print(login)
+            if (iduser := make_request_user_password(login))+1:#If user entered correct log in then we start making request about his password
                 return iduser, logs#If user entered correct login and password from database then we return his id
         return ''
 

@@ -61,7 +61,7 @@ def feel(element: dict) -> Union[bool, int]: #Сделать возможным 
         if answer(
             'Логс файлы успешно созданы, желаете ли вы создать первого пользователя?'
         ):
-            new_user: tuple = create_user(0)
+            new_user: tuple = create_user(0, 'admin')
             creater_create = True
             data.append(row_write(new_user))
         with open(element['path'], 'wt', encoding='utf-8') as logs_file:
@@ -160,10 +160,12 @@ def load_file(
                 from Baza_constanti import FEILDS_LOGS
                 KEY_TITLE_LOGIN: int = 1
                 KEY_TITLE_PAS: int = 2
-                for id_data, log_data, pass_data in data_file:
+                KEY_TITLE_ROLE: int = 3
+                for id_data, log_data, pass_data, role_data in data_file:
                     data[int(id_data)] = {
                         FEILDS_LOGS[KEY_TITLE_LOGIN]: log_data, 
                         FEILDS_LOGS[KEY_TITLE_PAS]: pass_data.rstrip('\n'),
+                        FEILDS_LOGS[KEY_TITLE_ROLE]: role_data.rstrip('\n').strip(),
                         }
             case _:
                 print('Неизвестный код конфига')

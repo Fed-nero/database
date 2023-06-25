@@ -12,13 +12,14 @@ def row_read(data: str) -> tuple:
     return tuple(data.split(SEPARATION))
 
 
-def create_user(id: int) -> tuple:
+def create_user(id: int, role: str = 'User') -> tuple:
     '''Create a new user.'''
     from interaction_function.user import get_login, get_password
     user_id: int = id
     user_login: str = get_login()
     user_password: str = get_password()
-    return user_id, user_login, user_password
+    user_role: str = role
+    return user_id, user_login, user_password, user_role
 
 
 def create_records(id: int) -> str:
@@ -37,10 +38,12 @@ def logs_update(logs, *users:tuple):
     from Baza_constanti import FEILDS_LOGS
     KEY_TITLE_LOG: int = 1
     KEY_TITLE_PAS: int = 2
+    KEY_TITLE_ROLE: int = 3
     for user in users:
-        id,log,pas = user
+        id,log,pas,role = user
         logs[id] = {
             FEILDS_LOGS[KEY_TITLE_LOG]: log,
             FEILDS_LOGS[KEY_TITLE_PAS]: pas,
+            FEILDS_LOGS[KEY_TITLE_ROLE]: role,
         }
     return logs
