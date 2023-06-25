@@ -20,7 +20,10 @@ def main() -> None:
         db, logs = load_all(DATA_BASE, LOGS_FILE)
         if not code_existance_creator == CODE_CREATE_CREATOR:
             user_id, logs = identification_menue(logs)
-        print(f'Wellcome {logs[user_id]["LOGIN"]}!')
+        if logs[user_id]['ROLE'] != 'User':
+            print(f'Wellcome dear perefct awsome wonderful great lord named {logs[user_id]["LOGIN"]}')
+        else:
+            print(f'Hello uuser: {logs[user_id]["LOGIN"]}!')
         save_all(db, logs, DATA_BASE['path'], LOGS_FILE['path'])
 
     else:

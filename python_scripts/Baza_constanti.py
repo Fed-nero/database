@@ -57,6 +57,7 @@ FEILDS_LOGS: tuple = (
     'ID',
     'LOGIN',
     'PASSWORD',
+    'ROLE',
 )
 FEILDS_RECORDS: tuple = (
     'TIME_CREATIVE',
